@@ -8,6 +8,8 @@ import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glColor4f;
 import static org.lwjgl.opengl.GL11.glEnable;
 
+import java.util.Objects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
@@ -270,12 +272,14 @@ public class RTEventHandler {
     @SubscribeEvent
     public void changedDimension(PlayerChangedDimensionEvent event) {
         if (event.toDim == Settings.SPECTRE_DIMENSON_ID) {
-            double movementFactor = 1;
             EntityPlayer player = event.player;
             WorldServer world = MinecraftServer.getServer().worldServerForDimension(event.fromDim);
+            double movementFactor = 1;
+
             if (world != null) {
                 WorldProvider provider = world.provider;
                 if (provider != null) {
+                    if (Objects.equals(provider.getDimensionName(), "CompactMachinesWorld")) return;
                     movementFactor = provider.getMovementFactor();
                 }
             }
